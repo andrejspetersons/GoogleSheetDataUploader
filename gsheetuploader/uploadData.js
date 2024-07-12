@@ -1,12 +1,14 @@
 const fs=require('fs')
 const {google}=require('googleapis')
 const sheets=google.sheets('v4')
+const {validateTestData}=require('./validation')
 
-//Load config
-const KEY_PATH='./gsheetuploader-429020-008f85f8a544.json'
+
 const DATA_PATH='./testData.js'
+
+//Load configuration data
 const config=JSON.parse(fs.readFileSync('./configure.json'))
-const{credentialsPath,spreadsheetId,spreadsheetName}=config
+const{secretKeyPath,credentialsPath,spreadsheetId,spreadsheetName}=config
 
 //Load credentials
 const credentials=JSON.parse(fs.readFileSync(credentialsPath,'utf8'))
@@ -14,17 +16,22 @@ const credentials=JSON.parse(fs.readFileSync(credentialsPath,'utf8'))
 //Authorize
 async function authorize(){
     const{client_email,private_key}=credentials
-    const auth=new google.auth.JWT(client_email,KEY_PATH,private_key,[
+    const auth=new google.auth.JWT(client_email,secretKeyPath,private_key,[
         'https://www.googleapis.com/auth/spreadsheets'    
     ])
     await auth.authorize()
     return auth
 }
 
-//Upload Data
+//Upload Data+Validating data format
 async function uploadData(auth){
     const testDataContent = fs.readFileSync(DATA_PATH, 'utf8');
     const testData = eval(testDataContent)
+
+    if(!validateTestData(testData)){
+        console.error('Invalid data format')
+        return
+    }
 
     const columns=Array.from(new Set(testData.flatMap(Object.keys)))
     

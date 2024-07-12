@@ -1,4 +1,5 @@
 {
+    "secretKeyPath":"./secretKey.json",
     "credentialsPath":"./credentials.json",
     "spreadsheetId":"1vQFuFSH_JLQXi4kdYlnYURwu8QCD65d5mMSKW28DORg",
     "spreadsheetName":"Sheet1"
