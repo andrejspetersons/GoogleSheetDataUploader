@@ -1,4 +1,4 @@
-## Last changes 12.07.24 (at GoogleSheetDataUploader_11.07.24 branch)
+## Last changes 12.07.24
 ### Program installation
 + Install zip file
 + Unpack in folder
